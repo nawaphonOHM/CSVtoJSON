@@ -1,2 +1,2 @@
 # CSVtoJSON
-Covert .csv file to .json
+Convert .csv file to .json
