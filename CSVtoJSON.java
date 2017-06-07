@@ -21,56 +21,60 @@ public class CSVtoJSON {
 	private String[] JSONString;
 	private PrintWriter objectJSONFIle;
 	private String stringToWrite;
+	private String JSONFileNmae;
 
-	public static void main(String[] args) {
-		CSVtoJSON file = new CSVtoJSON();
-		file.recivefilename();
-		System.out.print("Searching location... ");
-		while(true){
-			if(!(file.isItMoreDrives())){
-				System.out.println("File not Found!");
-				System.exit(0);
-			}
-			else{
-				file.searchingPath();
-				if(file.isFound()){
-					System.out.println("Done!");
-					System.out.println("Found at: " + file.pathFile());
-					break;
+	protected void start() { //Main Method.
+		recivefilename();
+		if(!(isItPath(this.filename))){
+			System.out.print("Searching location... ");
+			while(true){
+				if(!(isItMoreDrives())){
+					System.out.println("File not Found!");
+					System.exit(0);
 				}
-				else{
-					file.nextDrive();
+				else{   
+					searchingPath();
+					if(isFound()){
+						System.out.println("Done!");
+						System.out.println("Found at: " + pathFile());
+						break;
+					}
+					else{
+						nextDrive();
+					}
 				}
 			}
 		}
+		else{
+			itIsCorrectPathAlready();
+		}
 		System.out.print("Writing JSON File... ");
-		file.writeFile();
+		readAndWriteFile();
 		System.out.println("Done!");
 	}
 	
-	protected String pathFile(){
+	private void itIsCorrectPathAlready(){
+		this.correctPath = this.filename;
+	}
+	
+	private String pathFile(){
 		return this.correctPath;
 	}
 	
-	protected String whereIsPathFile(){
-		return correctPath;
-	}
-	
-	protected void nextDrive(){
+	private void nextDrive(){
 		this.drive++;
 		this.path = this.drive + ":\\";
-		
 	}
 	
-	protected boolean isFound(){
+	private boolean isFound(){
 		return this.found;
 	}
 	
-	protected boolean isItMoreDrives(){
+	private boolean isItMoreDrives(){
 		return this.drive <= 'Z';
 	}
 	
-	protected void searchingPath(){
+	private void searchingPath(){
 		File files = new File(this.path);
 		File[] listfiles = files.listFiles();
 		if(listfiles != null){
@@ -97,7 +101,7 @@ public class CSVtoJSON {
 		this.stringToWrite = "";
 	}
 	
-	protected void writeFile(){
+	private void readAndWriteFile(){
 		try{
 			this.filedata = new BufferedReader(new FileReader(this.correctPath));
 			this.typeToJSON = this.filedata.readLine().split(",,");
@@ -105,8 +109,7 @@ public class CSVtoJSON {
 			this.correctPath = this.correctPath.substring(0, 
 					this.correctPath.lastIndexOf("\\") + 1);
 			this.objectJSONFIle = new PrintWriter(new BufferedWriter(
-					new FileWriter(new File(this.correctPath + "finnished.json"), false)));
-			this.stringToWrite += "[";
+					new FileWriter(new File(this.correctPath + this.JSONFileNmae), false)));
 			while((this.stringFile = this.filedata.readLine()) != null){
 				this.JSONString = this.stringFile.split(",,");
 				this.JSONString = this.JSONString[0].split(",");
@@ -119,7 +122,7 @@ public class CSVtoJSON {
 				this.stringToWrite = this.stringToWrite.substring(0, 
 						this.stringToWrite.lastIndexOf(",")) + "},\n";
 			}
-			this.stringToWrite = this.stringToWrite.substring(0, 
+			this.stringToWrite = "[" + this.stringToWrite.substring(0, 
 					this.stringToWrite.lastIndexOf(",")) + "]";
 			this.objectJSONFIle.print(this.stringToWrite);
 			this.objectJSONFIle.close();
@@ -134,31 +137,53 @@ public class CSVtoJSON {
 		
 	}
 	
-	protected void recivefilename(){
+	private void recivefilename(){
 		System.out.print("Input CSV file: ");
 		while(true){
 			this.keyboardInput = new Scanner(System.in);
 			this.filename = keyboardInput.nextLine();
-			hasItTypeFile();
-			if(!(isItValid())){
+			hasItTypeFileCSV();
+			if(!(isItValidCSV())){
 				System.out.println("It was not CSV file!");
 				System.out.print("Input new CSV file: ");
 			}
 			else{
 				break;
 			}
-			
+		}
+		System.out.print("Input JSON file name: ");
+		while(true){
+			this.JSONFileNmae = keyboardInput.nextLine();
+			hasItTypeFileJSON();
+			if(isItPath(this.JSONFileNmae)){
+				System.out.println("Incorrect JSON file name!");
+				System.out.print("Input new JSON file name: ");
+			}
+			else{
+				break;
+			}
 		}
 	}
 	
-	private void hasItTypeFile(){
+	private void hasItTypeFileJSON(){
+		String[] filename = this.JSONFileNmae.split("[.]");
+		if(filename.length != 2){
+			this.JSONFileNmae += ".json";
+		}
+	}
+	
+	private boolean isItPath(String filename){
+		return filename.contains("\\");
+	}
+	
+	private void hasItTypeFileCSV(){
 		String[] filename = this.filename.split("[.]");
 		if(filename.length != 2){
 			this.filename += ".csv";
 		}
 	}
 	
-	private boolean isItValid(){
+	private boolean isItValidCSV(){
 		String[] filename = this.filename.split("[.]");
 		return filename[1].contains("csv");
 	}
