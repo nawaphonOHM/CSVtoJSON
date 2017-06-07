@@ -22,6 +22,7 @@ public class CSVtoJSON {
 	private PrintWriter objectJSONFIle;
 	private String stringToWrite;
 	private String JSONFileNmae;
+	private String validpathfromuser;
 
 	protected void start() { //Main Method.
 		recivefilename();
@@ -87,8 +88,23 @@ public class CSVtoJSON {
 					}
 				}
 				else if(this.filename.equals(file.getName())){
-					this.correctPath = file.toString();
-					this.found = true;
+					while(true){
+						System.out.println("Found at: " + file.toString());
+						System.out.println("Is it correct path?");
+						this.validpathfromuser = this.keyboardInput.nextLine();
+						this.validpathfromuser.replaceAll("[^a-z^A-Z]", "");
+						this.validpathfromuser.toLowerCase();
+						if(this.validpathfromuser.matches("(yes)|(no)")){
+							if(this.validpathfromuser.equals("yes")){
+								this.correctPath = file.toString();
+								this.found = true;
+							}
+							break;
+						}
+						else{
+							System.out.println("Please answer only yes or no!");
+						}
+					}
 				}
 			}
 		}
@@ -187,5 +203,4 @@ public class CSVtoJSON {
 		String[] filename = this.filename.split("[.]");
 		return filename[1].contains("csv");
 	}
-
 }
