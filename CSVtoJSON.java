@@ -129,7 +129,7 @@ public class CSVtoJSON {
 			this.filedata.close();
 		}
 		catch(FileNotFoundException filenotfound){
-			System.out.println(filenotfound.getMessage());
+			System.out.println("File not Found!");
 		} 
 		catch (IOException ioexception) {
 			ioexception.getMessage();
