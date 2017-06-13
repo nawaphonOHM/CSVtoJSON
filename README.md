@@ -16,4 +16,4 @@ Note: If you insert file name, Code will search all drives start at drive C, Whi
 
 5.Done!
 
-Note: This code has only one method name is start() that can see the outside class, You just call this method, Doesn't call the other methods if using convert them.
+Note: This code has only one method name is start() that can see the outside class(protected method), You just call this method, Doesn't call the other methods if using convert them.
