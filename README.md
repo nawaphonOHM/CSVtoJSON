@@ -14,6 +14,6 @@ Convert .csv file to .json
 
 1. Done!
 
-### Note: If you insert file name, Code will be search all drives start at drive C, While searching if match code will ask you that: Is it correct path?, If you type yes, Code will be stop searching.
+### Note: If you insert file name, Code would search all drives start at drive C, While searching if match code would ask you that: Is it correct path?, If you type yes, Code would stop searching.
 
 ### Note: This code has only one method name is start() that can see the outside class(protected method), You just call this method, Doesn't call the other methods if using convert them.
